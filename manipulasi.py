@@ -1,4 +1,5 @@
 import torch
+import timeit
 
 # manipulasi tensor
 # 1.penjumlahan tensor
@@ -24,7 +25,7 @@ print(tensorKurang - 10)
 tensorBagi = torch.tensor([1, 2, 3])
 print(tensorBagi / 10)
 
-#pytorch in built function
+# #pytorch in built function
 
 # Perkalian tensor dengan in built function
 torch.mul(tensorKali,10) #perkalian tensor dengan in built function
@@ -41,3 +42,97 @@ print(torch.sub(tensorKurang,10))
 # Pembagian tensor dengan in built function
 torch.div(tensorKurang,10) #pembagian tensor dengan in built function
 print(torch.div(tensorKurang,10))
+
+################################################################################
+
+# Perkalian matriks
+# ada 2 cara perkalian matriks di neural network dan deep learning
+# 1 perkalian elemen matriks
+# 2 perkalian matriks (perkalian dot product)
+
+# perkalian elemen matriks
+print(tensorTambah ,"*", tensorTambah)
+print(f"Sama dengan: {tensorTambah * tensorTambah}")
+
+# # perkalian matriks (perkalian dot product)
+torch.matmul(tensorTambah, tensorTambah) #perkalian matriks dengan in built function
+print(torch.matmul(tensorTambah , tensorTambah))
+
+#perbandungan method perkalian matrik dan for loop perkalian matriks
+
+# Mengukur waktu eksekusi torch.matmul sebanyak 10000 kali
+waktumatmul = timeit.timeit(
+    stmt="torch.matmul(tensorTambah, tensorTambah)",
+    setup="import torch; tensorTambah = torch.tensor([1, 2, 3])",
+    number=10000
+)
+print(waktumatmul)
+
+waktuForLoop = timeit.timeit(
+    stmt="""
+value = 0
+for i in range(len(tensorTambah)):
+    value += tensorTambah[i] * tensorTambah[i]
+""",
+    setup="import torch; tensorTambah = torch.tensor([1, 2, 3])",
+    number=10000
+)
+print(waktuForLoop)
+
+# matmul lebih cepat daripada for loop
+
+#####################################################################################
+
+# 2 Aturan pada perkalian matriks
+
+# 1. Jumlah kolom pada matriks pertama harus sama dengan jumlah baris pada matriks kedua
+# @ adalah operator perkalian matriks
+print(tensorTambah @ tensorTambah)
+
+# print(torch.matmul(torch.rand(3, 2), torch.rand(3, 2))) # error karena shape tidak sesuai
+print(torch.matmul(torch.rand(2, 3), torch.rand(3, 2)))
+print(torch.matmul(torch.rand(3, 2) , torch.rand(2, 3))) # ,2) , (2 inner dimension
+#2 contoh diatas adalah contoh benar dengan inner dimension yang sama yang 3 dan 3 , dan 2 dan 2
+
+# 2. Hasil perkalian matriks akan memiliki jumlah baris dari matriks pertama dan jumlah kolom dari matriks kedua
+print(torch.rand(2, 4) @ torch.rand(4, 2)) # matriks yang dikalikan akan berbentuk 2x2 karena outer dimension nya 2
+print(torch.rand(2, 3) @ torch.rand(3, 4)) # matriks yang dikalikan akan berbentuk 2x4 karena outer dimension nya 2 dan 4 dan tidak akan terjadi eror
+print(torch.matmul(torch.rand(2, 3) , torch.rand(3, 2)).shape)
+
+## mengatasi error pada perkalian matriks dalam kasus shape tidak sesuai
+##TRANSPOSE dapat berfungsi untuk 2D(matriks) saja
+tensorA = torch.tensor([[1, 2],
+                        [3, 4],
+                        [5, 6]])
+tensorB = torch.tensor([[7, 10],
+                        [8, 11],
+                        [9, 12]])
+# torch.mm adalah fungsi untuk perkalian matriks
+print(tensorA, tensorB)
+print(tensorA.shape, tensorB.shape)
+
+# untuk mengatasi eror shape kita bisa gunakan *transpose*
+#transpose akan mengubah baris menjadi kolom dan kolom menjadi baris / dimensi
+tensorB.T # transpose
+tensorA.T
+print(tensorB.T.shape)
+
+print(torch.mm(tensorA, tensorB.T)) #matrik A dan B sakarang bisa di operasikan
+print(torch.mm(tensorA, tensorB.T).shape)
+print(torch.mm(tensorA.T, tensorB))
+print(torch.mm(tensorA.T, tensorB).shape)
+
+## view
+tensorAV = tensorA.view(2, 3) # mengubah shape tensor A menjadi 2 baris dan 3 kolom
+## penggunaan view untuk mengubah shape tensor,tidak membuat salinan tensor namun saat tensor sudah di transpose/permute gunakan contiguous lalu view
+tensorATV = tensorA.T.contiguous().view(2, 3)
+
+## Reshape
+tensorAR = tensorA.reshape(2, 3) # mengubah shape tensor A menjadi 2 baris dan 3 kolom
+# reshape juga tidak membuat salinan tensor tapi saat fleksibel daripada view
+
+##Permute
+# permute digunakan untuk mengubah urutan dimensi 3D(tensor)
+tensor3D = torch.rand(2, 3, 4)
+tensor3DPerm = tensor3D.permute(2, 0, 1) # mengubah urutan dimensi menjadi (4, 2, 3) dengan indexing
+print(tensor3DPerm.shape)
