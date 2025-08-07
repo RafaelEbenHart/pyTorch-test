@@ -146,12 +146,6 @@ tensorR = tensorEX.reshape(1, 9) # mengubah shape tensor A menjadi 1 baris dan 9
 # reshape juga tidak membuat salinan tensor tapi saat fleksibel daripada view
 # reshape harus sesuai dengan jumlah elemen pada tensor
 
-##Permute
-# permute digunakan untuk mengubah urutan dimensi 3D(tensor)
-tensor3D = torch.rand(2, 3, 4)
-tensor3DPerm = tensor3D.permute(2, 0, 1) # mengubah urutan dimensi menjadi (4, 2, 3) dengan indexing
-print(tensor3DPerm.shape)
-
 ## Stacking
 # stacking digunakan untuk menggabungkan beberapa tensor menjadi satu tensor
 # dibagi menjadi 2 yaitu vstacking dan hstacking yakni vertikal dan horizontal
@@ -161,8 +155,32 @@ print(tensorTumpuk)
 # dim=1 untuk menggabungkan tensor secara horizontal
 
 ## squeezing
-# squeezing digunakan untuk menghapus dimensi yang memiliki ukuran 1
-
+# squeezing digunakan untuk menghapus dimensi yang berukuran 1
+print(tensorV) # tensor V sebelum di squeeze
+tensorSQ = tensorV.squeeze()
+print(f"tensor awal adalah {tensorV}")
+print(f"bentuk tensor awal adalah {tensorV.shape}")
+##  Menghapus dimensi pada tensor
+print(f"tensor setelah di squeeze adalah {tensorSQ}")
+print(f"bentuk tensor setelah di squeeze adalah {tensorSQ.shape}")
 
 ## unsqueezing
-# unsqueezing digunakan untuk menambahkan dimensi baru pada tensor
+# unsqueezing digunakan untuk menambahkan dimensi baru pada tensor dengan dimensi yang spesifik
+print(f"target tensor adalah {tensorSQ}")
+print(f"bentuk tensor target adalah {tensorSQ.shape}")
+## Menambahkan dimensi baru pada tensor
+tensorUSQ = tensorSQ.unsqueeze(dim=0) # menambah dimensi sesuai indexing
+print(f"tensor setelah unsqueeze adalah {tensorUSQ}")
+print(f"bentuk tensor setelah unsqueeze adalah {tensorUSQ.shape}")
+
+##Permute
+# permute digunakan untuk mengubah urutan dimensi 3D(tensor)
+tensor3D = torch.rand(2, 3, 4)
+tensor3DPerm = tensor3D.permute(2, 0, 1) # mengubah urutan dimensi menjadi (4, 2, 3) dengan indexing
+print(tensor3DPerm.shape)
+
+tensorIMG = torch.rand(size=(224, 224, 3)) # tinggi , lebar dan color channel
+tensorIMG_perm = tensorIMG.permute(2, 0 ,1) # color channel, tinggi, lebar
+print(f"hasil permute dari tensorIMG {tensorIMG_perm.shape}")
+
+
