@@ -1,5 +1,5 @@
 import torch
-import numpy as np #logika perhitungan
+import numpyTest as np #logika perhitungan
 import pandas as pd #data manipulasi
 import matplotlib.pyplot as plt #visualisasi data
 
